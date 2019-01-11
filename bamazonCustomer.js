@@ -65,15 +65,18 @@ function start() {
       });
 }
 
+function validateNumber(number) {
+   var isValid = !isNaN(parseInt(number));
+   return isValid || "This should be a number!";
+}
+
 function placeOrder() {
    inquirer
       .prompt([{
          name: "product",
          type: "input",
          message: "What product are you looking for ?",
-         validate: function (input) {
-            return input != NaN || "Must Enter Number";
-         }
+         validate: validateNumber
       }, {
          name: "quantity",
          type: "input",
@@ -90,9 +93,11 @@ function placeOrder() {
                console.log(
                   "You ordered " + answer.quantity + " " + response[0].product_name
                )
+               start(); // Gotta be here or the whole deal crashes
             });
-            // start();
+            // start(); Why does this mess up the flow of the execution??
       });
+      // start(); I don't understand how having this outside the promise overwrites the output (or prevents from being written maybe?)
 }
 
 function printInventory() {
