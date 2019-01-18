@@ -31,3 +31,5 @@ CREATE TABLE products
     SELECT *
     FROM products
     WHERE `department_name` = 'Electronics';
+
+    UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?
