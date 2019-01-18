@@ -1,25 +1,5 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
-// const program = require('commander');
-// const fs = require('fs');
-// const csv = require('csv');
-
-// program
-//   .version('0.0.1')
-//   .option('-l, --list [list]', 'List of customers in CSV')
-//   .parse(process.argv)
-
-// let parse = csv.parse;
-// let stream = fs.createReadStream(program.list)
-//     .pipe(parse({ delimiter : ',' }));
-
-// stream
-//   .on('data', function (data) {
-//     let firstname = data[0];
-//     let lastname = data[1];
-//     let email = data[2];
-//     console.log(firstname, lastname, email);
-//   });
 
 // create the connection info for sql db
 var connection = mysql.createConnection({
@@ -60,23 +40,24 @@ function start() {
 
             case "Exit":
                process.exit(-1);
-               break;
          }
       });
 }
 
-function validateNumber(number) {
-   var isValid = !isNaN(parseInt(number));
-   return isValid || "This should be a number!";
-}
-
 function placeOrder() {
+
+   var maxID = -1;
+   connection.query("SELECT * FROM products", function (error, response) {
+      if (error) throw error;
+      maxID = response.length;
+   });
+
    inquirer
       .prompt([{
          name: "product",
          type: "input",
          message: "What product are you looking for ?",
-         validate: validateNumber
+         validate: num => (num > 0 && num <= maxID) || "Please Enter ID# of the item you wish to purchase"
       }, {
          name: "quantity",
          type: "input",
@@ -87,30 +68,28 @@ function placeOrder() {
             "SELECT * FROM products WHERE `item_id` = ?",
             [answer.product],
             function (error, response) {
-               if (error) {
-                  return console.log(error);
-               }
+               if (error) throw error;
 
                var updatedQuantity = response[0].stock_quantity - answer.quantity;
-               console.log(updatedQuantity);
+
                if (updatedQuantity < 0) {
                   console.log("Insufficient quantity!");
                } else {
                   connection.query(
                      "UPDATE products SET `stock_quantity` = ? WHERE `item_id` = ?",
-                     [updatedQuantity, answer.product], 
+                     [updatedQuantity, answer.product],
                      function (error) {
                         if (error) throw error;
                      }
                   )
                   console.log("You ordered " + answer.quantity + " " + response[0].product_name);
                }
-               
+
                start(); // Gotta be here or the whole deal crashes
             });
-            // start(); Why does this mess up the flow of the execution??
+         // start(); Why does this mess up the flow of the execution??
       });
-      // start(); I don't understand how having this outside the promise overwrites the output (or prevents from being written maybe?)
+   // start(); I don't understand how having this outside the promise overwrites the output (or prevents from being written maybe?)
 }
 
 function printInventory() {
