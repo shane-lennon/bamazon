@@ -90,9 +90,22 @@ function placeOrder() {
                if (error) {
                   return console.log(error);
                }
-               console.log(
-                  "You ordered " + answer.quantity + " " + response[0].product_name
-               )
+
+               var updatedQuantity = response[0].stock_quantity - answer.quantity;
+               console.log(updatedQuantity);
+               if (updatedQuantity < 0) {
+                  console.log("Insufficient quantity!");
+               } else {
+                  connection.query(
+                     "UPDATE products SET `stock_quantity` = ? WHERE `item_id` = ?",
+                     [updatedQuantity, answer.product], 
+                     function (error) {
+                        if (error) throw error;
+                     }
+                  )
+                  console.log("You ordered " + answer.quantity + " " + response[0].product_name);
+               }
+               
                start(); // Gotta be here or the whole deal crashes
             });
             // start(); Why does this mess up the flow of the execution??
