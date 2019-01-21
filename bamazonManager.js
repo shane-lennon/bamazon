@@ -25,7 +25,7 @@ function start() {
             choices: [
                 "View Products for Sale",
                 "View Low Inventory",
-                "Add to Inventory",
+                "Add Inventory",
                 "Add New Product",
                 "Exit"
             ]
@@ -38,7 +38,7 @@ function start() {
                 case "View Low Inventory":
                     viewLowInventory();
                     break;
-                case "Add to Inventory":
+                case "Add Inventory":
                     addInventory();
                     break;
                 case "Add New Product":
@@ -80,7 +80,8 @@ function printInventory() {
             }
             console.log("--------------------------------------------------------------------------------------------");
             start();
-        });
+        }
+    );
 }
 
 function viewLowInventory() {
@@ -113,7 +114,8 @@ function viewLowInventory() {
             }
             console.log("--------------------------------------------------------------------------------------------");
             start();
-        });
+        }
+    );
 }
 
 function addInventory() {
@@ -142,18 +144,54 @@ function addInventory() {
                     if (error) throw error;
 
                     var updatedQuantity = response[0].stock_quantity + parseInt(answer.quantity);
-                    console.log(response)
 
-                    connection.query("UPDATE products SET ? WHERE ?", [{
-                        stock_quantity: updatedQuantity
-                    }, {
-                        item_id: answer.id
-                    }], function (error) {
-                        if (error) throw error;
-                    });
-                    console.log(`You added ${answer.quantity} to ${response[0].product_name}`)
-
+                    connection.query("UPDATE products SET ? WHERE ?",
+                        [{
+                            stock_quantity: updatedQuantity
+                        }, {
+                            item_id: answer.id
+                        }],
+                        function (error) {
+                            if (error) throw error;
+                        });
+                    console.log(`\nYou added ${answer.quantity} ${response[0].product_name} to the ${response[0].department_name} Department.\n`)
                     start();
                 });
         })
+}
+
+function addProduct() {
+    inquirer.prompt([{
+        name: "productName",
+        type: "input",
+        message: "Enter the name of the product ?",
+    }, {
+        name: "departmentName",
+        type: "input",
+        message: "Enter the department of the product ?",
+    }, {
+        name: "price",
+        type: "input",
+        message: "Enter price of the product ?",
+    }, {
+        name: "quantity",
+        type: "input",
+        message: "Enter the quantity ?",
+    }]).then(function (answer) {
+        connection.query("INSERT INTO products SET ?", {
+            product_name: answer.productName,
+            department_name: answer.departmentName,
+            price: answer.price,
+            stock_quantity: answer.quantity
+        }, function (error) {
+            if (error) throw error;
+
+            connection.query('SELECT * FROM products', function (error, response) {
+                if (error) throw error;
+                var line = response[response.length - 1];
+                console.log(`\nYou added ${line.stock_quantity} ${line.product_name} (ID# ${line.item_id}) to the ${line.department_name} Depatrtment.\n`);
+                start();
+            });
+        });
+    });
 }

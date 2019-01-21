@@ -71,25 +71,23 @@ function placeOrder() {
                if (error) throw error;
 
                var updatedQuantity = response[0].stock_quantity - answer.quantity;
+               var productSales = response[0].price * answer.quantity;
 
                if (updatedQuantity < 0) {
                   console.log("Insufficient quantity!");
                } else {
                   connection.query(
-                     "UPDATE products SET `stock_quantity` = ? WHERE `item_id` = ?",
-                     [updatedQuantity, answer.product],
+                     "UPDATE products SET `stock_quantity` = ?, `product_sales` = ? WHERE `item_id` = ?",
+                     [updatedQuantity, productSales, answer.product],
                      function (error) {
                         if (error) throw error;
                      }
                   )
-                  console.log("You ordered " + answer.quantity + " " + response[0].product_name);
+                  console.log(`\nYou ordered ${answer.quantity} ${response[0].product_name} totalling $${productSales.toFixed(2)}\n`);
                }
-
-               start(); // Gotta be here or the whole deal crashes
+               start();
             });
-         // start(); Why does this mess up the flow of the execution??
       });
-   // start(); I don't understand how having this outside the promise overwrites the output (or prevents from being written maybe?)
 }
 
 function printInventory() {
