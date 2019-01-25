@@ -111,6 +111,12 @@ ON
 		function (error, response) {
 			if (error) throw error;
 			for (i = 0; i < response.length; i++) {
+				var profit = response[i].total_profit;
+				if (profit < 0) {
+					profit = profit.toString().red;
+				} else {
+					profit = profit.toString().gray;
+				}
 				table.push([{
 						hAlign: 'center',
 						content: response[i].department_id.toString().green
@@ -126,7 +132,7 @@ ON
 					},
 					{
 						hAlign: 'right',
-						content: response[i].total_profit.toFixed(2).gray
+						content: profit
 					}
 				]);
 			}
