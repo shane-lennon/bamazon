@@ -113,9 +113,9 @@ ON
 			for (i = 0; i < response.length; i++) {
 				var profit = response[i].total_profit;
 				if (profit < 0) {
-					profit = profit.toString().red;
+					profit = profit.toFixed(2).toString().red;
 				} else {
-					profit = profit.toString().gray;
+					profit = profit.toFixed(2).toString().gray;
 				}
 				table.push([{
 						hAlign: 'center',

@@ -189,7 +189,7 @@ function addProduct() {
             connection.query('SELECT * FROM products', function (error, response) {
                 if (error) throw error;
                 var line = response[response.length - 1];
-                console.log(`\nYou added ${line.stock_quantity} ${line.product_name} (ID# ${line.item_id}) to the ${line.department_name} Depatrtment.\n`);
+                console.log(`\nYou added ${line.stock_quantity} ${line.product_name} (ID# ${line.item_id}) to the ${line.department_name} Department.\n`);
                 start();
             });
         });
