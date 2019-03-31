@@ -2,7 +2,7 @@
   <img src="./BAMazon.png" alt="BAMAZON">
 </p>
 
-Bamazon is not very unlike Amazon, in the sense that it enables consumers to buy a bevy of bitchin products but-- 
+Bamazon is *not* very unlike Amazon, in the sense that you can use it to but products but unlike Amazon...
 ## BAM! 
 
 It can all be done STRAIGHT FROM THE COMMAND LINE WITH NODE!! Never before has such bin-convenience been available! 
@@ -36,11 +36,11 @@ The user is free to continue browsing and making further purchases at their leis
   <img src="./bamazonManager.gif" alt="BAMAZON">
 </p>
 
-For the back end's backend, bmanagement can access all of the tools they will need to bmanhandle the databamaintenance by running 
+For the back end's backend, bmanagement can access all of the tools they will need to bmanhandle the database by running 
 
 `$ node bamazonManager.js`
 
-Just as the customer they will have the option to view the data in the `products` table by selecting `View Products for Sale`. 
+Just as the customer, they will have the option to view the data in the `products` table by selecting `View Products for Sale`. 
 
 The next option, `View Low Inventory`, returns a table with any items whose `stock_quantity < 5`. 
 
@@ -50,3 +50,18 @@ Lastly, `Add New Product` will prompt for a name, department, price and stock qu
 
 # bamazonSupervisor.js
 
+<p align="center">
+  <img src="./bamazonSupervisor.gif" alt="BAMAZON">
+</p>
+
+Finally, the *Big Bamanaman himself* can run shit using
+
+`$ node bamazonSupervisor.js`
+
+You'll notice that no expense was spared for our exec, as these tables are friggen sweet, in TECHNICOLOR! 
+
+Selecting `View Product Sales by Department` draws this state of the art table from `departments` showing each department and its respective overhead, sales and yummy profits.
+
+Our hero can add another department using sharpened business acumen and `Create New Department`, with prompts for department name and overhead costs. 
+
+At this point he should know that it is necessary to `exit` first and then run it again in order to view the updated table, since the overpaid developers who built this opus can't figure out how to redraw fucking table--but of course he would know that, he didn't make it to the top of the ladder without stepping on few schlubs that make those kinds of mistakes!! 
